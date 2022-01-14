@@ -5,6 +5,13 @@ export function promisify(functionToPromisify, context) {
         if (err) {
           reject(err);
         } else {
+          const [respBody, respInfo] = result;
+          const { statusCode } = respInfo;
+          if (statusCode / 100 >> 0 !== 2) {
+            reject(`status is: ${statusCode}, ${JSON.stringify(respBody)}`);
+            return;
+          }
+
           resolve(result);
         }
       });
